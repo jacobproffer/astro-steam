@@ -1,7 +1,6 @@
 ---
 import "@styles/global.css";
 import SiteSEO from "@components/SiteSEO.astro";
-import Cover from "@components/Cover.astro";
 
 interface Props {
   pageTitle: string;
@@ -19,8 +18,7 @@ const { pageTitle, pageDescription } = Astro.props;
     <SiteSEO seo={{ title: pageTitle, description: pageDescription }} />
   </head>
   <body class="h-screen text-white bg-black">
-    <!-- Viewport -->
-    <div class="relative grid h-full md:grid-cols-[1.25fr_2fr]">
+    <div class="relative h-full">
       <slot />
     </div>
   </body>
