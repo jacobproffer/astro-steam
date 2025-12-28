@@ -1,0 +1,45 @@
+---
+import Section from "@components/Section.astro";
+import Globe from "@assets/img/globe.svg";
+import Person from "@assets/img/person.svg";
+
+interface Props {
+  location: string;
+  joined: string;
+}
+
+const { location, joined } = Astro.props;
+---
+
+<Section headline="Biography">
+  <ul class="max-w-max flex items-center gap-4">
+    {
+      location && (
+        <li class="flex items-center gap-2">
+          <Globe width={13} height={14} aria-hidden="true" />
+          Located in the {location}
+        </li>
+      )
+    }
+    {
+      joined && (
+        <li class="flex items-center gap-2">
+          <Person width={13} height={14} aria-hidden="true" />
+          Joined Steam in{" "}
+          <time datetime={new Date(parseInt(joined) * 1000).toISOString()}>
+            {new Date(parseInt(joined) * 1000).toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </time>
+        </li>
+      )
+    }
+  </ul>
+  <p class="max-w-prose">
+    In 2004, I joined the PC gaming community with Counter Strike: Condition
+    Zero and Counter Strike: Source. Primarily, I play first person shooter and
+    zombie themed games, such as Arma 3 and Left 4 Dead 2.
+  </p>
+</Section>

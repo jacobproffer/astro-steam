@@ -1,0 +1,29 @@
+---
+import { Image } from "astro:assets";
+import Section from "@components/Section.astro";
+import L4D from "@assets/img/left-4-dead-2-thumbnail.jpg";
+import Arma3 from "@assets/img/arma-3-thumbnail.jpg";
+---
+
+<Section headline="Favorite Games">
+  <ul class="grid md:grid-cols-2 items-center gap-4 max-w-max">
+    <li>
+      <Image
+        class="border border-gray"
+        src={L4D}
+        alt="Left 4 Dead 2"
+        widths={[230, 460]}
+        sizes={`(max-width: 767px) 230px, 460px`}
+      />
+    </li>
+    <li>
+      <Image
+        class="border border-gray"
+        src={Arma3}
+        alt="Arma 3"
+        widths={[230, 460]}
+        sizes={`(max-width: 767px) 230px, 460px`}
+      />
+    </li>
+  </ul>
+</Section>
