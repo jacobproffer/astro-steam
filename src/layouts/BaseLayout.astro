@@ -1,8 +1,7 @@
 ---
 import "@styles/global.css";
-import SiteSEO from "../components/SiteSEO.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
+import SiteSEO from "@components/SiteSEO.astro";
+import Cover from "@components/Cover.astro";
 
 interface Props {
   pageTitle: string;
@@ -19,11 +18,10 @@ const { pageTitle, pageDescription } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <SiteSEO seo={{ title: pageTitle, description: pageDescription }} />
   </head>
-  <body>
-    <Header />
-    <main id="content">
+  <body class="h-screen text-white bg-black">
+    <!-- Viewport -->
+    <div class="relative grid h-full md:grid-cols-[1.25fr_2fr]">
       <slot />
-    </main>
-    <Footer />
+    </div>
   </body>
 </html>

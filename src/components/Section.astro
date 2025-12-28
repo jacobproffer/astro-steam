@@ -1,5 +1,5 @@
 ---
-import Container from "./Container.astro";
+import Container from "@components/Container.astro";
 
 interface Props {
   headline: string;
@@ -10,11 +10,7 @@ const { headline } = Astro.props;
 
 <section class="relative">
   <Container>
-    {
-      headline && (
-        <h2>{headline}</h2>
-      )
-    }
+    {headline && <h2>{headline}</h2>}
     <slot />
   </Container>
 </section>
