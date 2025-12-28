@@ -10,7 +10,11 @@ const { statusClass, status, headline } = Astro.props;
 
 <section class="flex items-center justify-center max-xl:pt-40 max-xl:pb-20">
   <div class="flex flex-col gap-2">
-    {headline && <h1 class="text-6xl font-share-tech">{headline}</h1>}
+    {
+      headline && (
+        <h1 class="text-6xl max-md:text-4xl font-share-tech">{headline}</h1>
+      )
+    }
     {status && <p class={statusClass} set:html={status} />}
   </div>
 </section>
