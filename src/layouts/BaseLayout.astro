@@ -21,7 +21,7 @@ const { pageTitle, pageDescription } = Astro.props;
   <body class="h-screen text-white bg-black">
     <!-- Viewport -->
     <div class="relative grid h-full md:grid-cols-[1.25fr_2fr]">
-      <Cover />
+      <slot />
     </div>
   </body>
 </html>
