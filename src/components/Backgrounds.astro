@@ -1,0 +1,19 @@
+---
+import { Image } from "astro:assets";
+import chooseBackground from "@utils/chooseBackground";
+
+interface Props {
+  currentGame: string;
+}
+---
+
+<div class="absolute inset-0 -z-10 w-full h-full bg-black">
+  <Image
+    class="block w-full h-full object-cover object-center opacity-10"
+    src={chooseBackground(Astro.props.currentGame)}
+    alt=""
+    widths={[413, 825, 1650]}
+    sizes={`(max-width: 767px) 413px, (max-width: 1023px) 825px, (max-width: 1439px) 825px, 1650px`}
+    loading="eager"
+  />
+</div>

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
+import Backgrounds from "@components/Backgrounds.astro";
 import Header from "@components/Header.astro";
 import Hero from "@components/Hero.astro";
 import Biography from "@components/Biography.astro";
@@ -72,12 +73,13 @@ console.log(userStatus);
 
 <BaseLayout pageTitle={pageTitle}>
   <Header userURL={userURL} userAvatar={userAvatar} />
-  <main class="grid md:grid-cols-2 h-full">
+  <main class="relative z-10 grid xl:grid-cols-2 h-full">
     <Hero statusClass={statusClass} status={status} headline={headline} />
-    <div class="max-w-max flex flex-col gap-4 py-4 px-6">
+    <div class="xl:max-w-max flex flex-col gap-4 py-4 px-6 bg-black">
       <Biography location={userCountry} joined={userJoined} />
       <Favorites />
       <RecentGames games={games} />
     </div>
+    <Backgrounds currentGame={userIsPlaying} />
   </main></BaseLayout
 >
