@@ -1,16 +1,27 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
+import Header from "@components/Header.astro";
 import Main from "@components/Main.astro";
 import Hero from "@components/Hero.astro";
+import Panel from "@components/Panel.astro";
+import Section from "@components/Section.astro";
 const pageTitle = "404";
 ---
 
 <BaseLayout pageTitle="404">
+  <Header />
   <Main>
     <Hero
       headline={pageTitle}
       statusClass="text-red"
-      status="Page not found."
+      status="The page you are looking for does not exist."
     />
+    <Panel>
+      <Section headline="Oops!">
+        <p>
+          Please check the URL or return to the <a href="/">homepage</a>.
+        </p>
+      </Section>
+    </Panel>
   </Main>
 </BaseLayout>

@@ -4,6 +4,7 @@ import Backgrounds from "@components/Backgrounds.astro";
 import Header from "@components/Header.astro";
 import Main from "@components/Main.astro";
 import Hero from "@components/Hero.astro";
+import Panel from "@components/Panel.astro";
 import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
 import RecentGames from "@components/RecentGames.astro";
@@ -70,11 +71,11 @@ const pageTitle = `What is ${userName} Playing`;
   <Header userURL={userURL} userAvatar={userAvatar} />
   <Main>
     <Hero statusClass={statusClass} status={status} headline={headline} />
-    <div class="xl:max-w-max flex flex-col gap-4 py-4 px-6 bg-black">
+    <Panel>
       <Biography location={userCountry} joined={userJoined} />
       <Favorites />
       <RecentGames games={games} />
-    </div>
+    </Panel>
     <Backgrounds currentGame={userIsPlaying} />
   </Main></BaseLayout
 >
