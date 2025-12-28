@@ -4,6 +4,7 @@ import Header from "@components/Header.astro";
 import Hero from "@components/Hero.astro";
 import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
+import RecentGames from "@components/RecentGames.astro";
 
 const key = import.meta.env.STEAM_API_KEY;
 const steamID = import.meta.env.STEAM_USER_ID;
@@ -76,6 +77,7 @@ console.log(userStatus);
     <div class="max-w-max flex flex-col gap-4 py-4 px-6">
       <Biography location={userCountry} joined={userJoined} />
       <Favorites />
+      <RecentGames games={games} />
     </div>
-  </main>
-</BaseLayout>
+  </main></BaseLayout
+>

@@ -1,0 +1,28 @@
+---
+import Section from "@components/Section.astro";
+import playTime from "@utils/playTime.js";
+
+interface Game {
+  name: string;
+  playtime_2weeks: number;
+}
+
+interface Props {
+  games: Game[];
+}
+
+const { games } = Astro.props;
+---
+
+<Section headline="Recent Activity">
+  <ol class="flex flex-col gap-4">
+    {
+      games.map((game) => (
+        <li class="flex items-center justify-between max-md:flex-col py-4 px-6 bg-black border border-gray rounded-lg">
+          <h3>{game.name}</h3>
+          <span class="text-blue">{playTime(game.playtime_2weeks)}</span>
+        </li>
+      ))
+    }
+  </ol>
+</Section>
