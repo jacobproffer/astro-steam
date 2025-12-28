@@ -14,7 +14,7 @@ const { userURL, userAvatar } = Astro.props;
 >
   <Logo width={50} height={33} />
   <a
-    class="flex items-center gap-2"
+    class="flex items-center gap-2 underline hover:text-green focus:outline-1 focus:outline-blue focus:outline-dashed transition-colors"
     href={userURL}
     target="_blank"
     rel="noopener noreferrer"
