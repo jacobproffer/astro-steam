@@ -2,7 +2,9 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Backgrounds from "@components/Backgrounds.astro";
 import Header from "@components/Header.astro";
+import Main from "@components/Main.astro";
 import Hero from "@components/Hero.astro";
+import Panel from "@components/Panel.astro";
 import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
 import RecentGames from "@components/RecentGames.astro";
@@ -10,14 +12,10 @@ import RecentGames from "@components/RecentGames.astro";
 const key = import.meta.env.STEAM_API_KEY;
 const steamID = import.meta.env.STEAM_USER_ID;
 
-console.log("Steam API Key exists:", !!key);
-console.log("Steam ID exists:", !!steamID);
-
 // Fetch user profile
 const profileURL = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${key}&steamids=${steamID}`;
 const profileResponse = await fetch(profileURL);
 const profileData = await profileResponse.json();
-console.log("Profile data:", profileData);
 const player = profileData?.response?.players[0];
 
 // Fetch recent games
@@ -67,19 +65,17 @@ if (userIsPlaying) {
 }
 
 const pageTitle = `What is ${userName} Playing`;
-
-console.log(userStatus);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
   <Header userURL={userURL} userAvatar={userAvatar} />
-  <main class="relative z-10 grid xl:grid-cols-2 h-full">
+  <Main>
     <Hero statusClass={statusClass} status={status} headline={headline} />
-    <div class="xl:max-w-max flex flex-col gap-4 py-4 px-6 bg-black">
+    <Panel>
       <Biography location={userCountry} joined={userJoined} />
       <Favorites />
       <RecentGames games={games} />
-    </div>
+    </Panel>
     <Backgrounds currentGame={userIsPlaying} />
-  </main></BaseLayout
+  </Main></BaseLayout
 >
