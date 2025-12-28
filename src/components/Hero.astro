@@ -1,20 +1,16 @@
 ---
-import Container from "@components/Container.astro";
-
 interface Props {
+  statusClass: string;
+  status: string;
   headline: string;
 }
 
-const { headline } = Astro.props;
+const { statusClass, status, headline } = Astro.props;
 ---
 
-<section>
-  <Container>
-    {
-      headline && (
-        <h1 class="font-medium text-xl leading-8 text-balance">{headline}</h1>
-      )
-    }
-    <slot />
-  </Container>
+<section class="flex items-center justify-center overflow-auto">
+  <div class="flex flex-col gap-2">
+    {headline && <h1 class="text-6xl font-share-tech">{headline}</h1>}
+    {status && <p class={statusClass} set:html={status} />}
+  </div>
 </section>

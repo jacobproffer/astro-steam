@@ -17,7 +17,7 @@ const { location, joined } = Astro.props;
       location && (
         <li class="flex items-center gap-2">
           <Globe width={13} height={14} aria-hidden="true" />
-          Located in the {location}
+          Located in the <span class="text-blue">{location}</span>
         </li>
       )
     }
@@ -26,7 +26,10 @@ const { location, joined } = Astro.props;
         <li class="flex items-center gap-2">
           <Person width={13} height={14} aria-hidden="true" />
           Joined Steam in{" "}
-          <time datetime={new Date(parseInt(joined) * 1000).toISOString()}>
+          <time
+            class="text-blue"
+            datetime={new Date(parseInt(joined) * 1000).toISOString()}
+          >
             {new Date(parseInt(joined) * 1000).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",

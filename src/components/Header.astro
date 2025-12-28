@@ -1,0 +1,34 @@
+---
+import Logo from "@assets/img/logo.svg";
+
+interface Props {
+  userURL: string;
+  userAvatar: string;
+}
+
+const { userURL, userAvatar } = Astro.props;
+---
+
+<header
+  class="absolute top-0 left-0 flex items-center justify-between w-full md:w-1/2 h-auto py-4 px-6"
+>
+  <Logo width={50} height={33} />
+  <a
+    class="flex items-center gap-2 underline hover:text-green focus:outline-1 focus:outline-blue focus:outline-dashed transition-colors"
+    href={userURL}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    {
+      userAvatar && (
+        <img
+          class="w-10 h-10 rounded-full"
+          src={userAvatar}
+          alt=""
+          loading="eager"
+        />
+      )
+    }
+    View Steam Profile
+  </a>
+</header>

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
-import Logo from "@assets/img/logo.svg";
+import Header from "@components/Header.astro";
+import Hero from "@components/Hero.astro";
 import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
 
@@ -69,36 +70,9 @@ console.log(userStatus);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <header
-    class="absolute top-0 left-0 flex items-center justify-between w-full md:w-1/2 h-auto py-4 px-6"
-  >
-    <Logo width={50} height={33} />
-    <a
-      class="flex items-center gap-2"
-      href={userURL}
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      {
-        userAvatar && (
-          <img
-            class="w-10 h-10 rounded-full"
-            src={userAvatar}
-            alt=""
-            loading="eager"
-          />
-        )
-      }
-      View Steam Profile
-    </a>
-  </header>
+  <Header userURL={userURL} userAvatar={userAvatar} />
   <main class="grid md:grid-cols-2 h-full">
-    <section class="flex items-center justify-center overflow-auto">
-      <div class="flex flex-col gap-2">
-        <h1 class="text-6xl">{headline}</h1>
-        {status && <p class={statusClass} set:html={status} />}
-      </div>
-    </section>
+    <Hero statusClass={statusClass} status={status} headline={headline} />
     <div class="max-w-max flex flex-col gap-4 py-4 px-6">
       <Biography location={userCountry} joined={userJoined} />
       <Favorites />
