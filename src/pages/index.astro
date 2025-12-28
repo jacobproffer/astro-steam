@@ -1,6 +1,12 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "@layouts/BaseLayout.astro";
-import Logo from "@assets/logo.svg";
+import Section from "@components/Section.astro";
+import Logo from "@assets/img/logo.svg";
+import Globe from "@assets/img/globe.svg";
+import Person from "@assets/img/person.svg";
+import L4D from "@assets/img/left-4-dead-2-thumbnail.jpg";
+import Arma3 from "@assets/img/arma-3-thumbnail.jpg";
 
 const key = import.meta.env.STEAM_API_KEY;
 const steamID = import.meta.env.STEAM_USER_ID;
@@ -32,6 +38,7 @@ const userIsPlayingId = player?.gameid;
 const userStatus = player?.personastate;
 const userAvatar = player?.avatarfull;
 const userURL = player?.profileurl;
+const userLastOnline = player?.lastlogoff;
 
 if (userIsPlaying) {
   statusClass = "text-green";
@@ -44,7 +51,18 @@ if (userIsPlaying) {
 } else {
   statusClass = "text-red";
   headline = "Offline";
-  status = `${userName} is not currently online.`;
+  const lastOnlineDate = userLastOnline
+    ? new Date(userLastOnline * 1000)
+    : null;
+  const lastOnlineISO = lastOnlineDate?.toISOString();
+  const lastOnlineFormatted = lastOnlineDate?.toLocaleString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
+  status = `${lastOnlineDate ? ` Last seen <time datetime="${lastOnlineISO}">${lastOnlineFormatted}</time>.` : ""}`;
 }
 
 const pageTitle = `What is ${userName} Playing`;
@@ -53,28 +71,28 @@ console.log(userStatus);
 ---
 
 <BaseLayout pageTitle={pageTitle}>
-  <header class="absolute top-0 left-0 w-full h-auto py-4 px-6">
-    <div class="flex items-center justify-between">
-      <Logo width={50} height={33} />
-      <a
-        class="flex items-center gap-2"
-        href={userURL}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {
-          userAvatar && (
-            <img
-              class="w-10 h-10 rounded-full"
-              src={userAvatar}
-              alt=""
-              loading="eager"
-            />
-          )
-        }
-        View Steam Profile
-      </a>
-    </div>
+  <header
+    class="absolute top-0 left-0 flex items-center justify-between w-full md:w-1/2 h-auto py-4 px-6"
+  >
+    <Logo width={50} height={33} />
+    <a
+      class="flex items-center gap-2"
+      href={userURL}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {
+        userAvatar && (
+          <img
+            class="w-10 h-10 rounded-full"
+            src={userAvatar}
+            alt=""
+            loading="eager"
+          />
+        )
+      }
+      View Steam Profile
+    </a>
   </header>
   <main class="grid md:grid-cols-2 h-full">
     <section class="flex items-center justify-center overflow-auto">
@@ -83,8 +101,47 @@ console.log(userStatus);
         {status && <p class={statusClass} set:html={status} />}
       </div>
     </section>
-    <section>
-      <h2>Biography</h2>
-    </section>
+    <div class="flex flex-col gap-4 py-4 px-6">
+      <Section headline="Biography">
+        <ul class="flex items-center gap-4">
+          <li class="flex items-center gap-2">
+            <Globe width={13} height={14} aria-hidden="true" />
+            Located in the US
+          </li>
+          <li class="flex items-center gap-2">
+            <Person width={13} height={14} aria-hidden="true" />
+            Joined Steam in 2004
+          </li>
+        </ul>
+        <p>
+          In 2004, I joined the PC gaming community with Counter Strike:
+          Condition Zero and Counter Strike: Source. Primarily, I play first
+          person shooter and zombie themed games, such as Arma 3 and Left 4 Dead
+          2.
+        </p>
+      </Section>
+      <Section headline="Favorite Games">
+        <ul class="grid md:grid-cols-2 items-center gap-4">
+          <li>
+            <Image
+              class="border border-gray"
+              src={L4D}
+              alt="Left 4 Dead 2"
+              widths={[230, 460]}
+              sizes={`(max-width: 767px) 230px, 460px`}
+            />
+          </li>
+          <li>
+            <Image
+              class="border border-gray"
+              src={Arma3}
+              alt="Arma 3"
+              widths={[230, 460]}
+              sizes={`(max-width: 767px) 230px, 460px`}
+            />
+          </li>
+        </ul>
+      </Section>
+    </div>
   </main>
 </BaseLayout>
