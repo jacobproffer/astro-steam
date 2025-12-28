@@ -8,19 +8,19 @@ interface Props {
 
 const { seo } = Astro.props;
 
-const siteName = "Astro Starter";
+const siteName = "What is Jacob Playing";
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
 <SEO
   title={seo?.title}
   description={seo?.description ??
-    "Astro starter with Typescript and Tailwind."}
+    "Find out what game Jacob Proffer is playing on Steam."}
   canonical={canonicalURL}
   openGraph={{
     basic: {
       url: canonicalURL,
-      title: seo?.title ?? "Astro Starter",
+      title: seo?.title ?? "What is Jacob Playing",
       type: "website",
       image: defaultImageFile.toString(),
     },
@@ -41,7 +41,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
       {
         name: "og:description",
         content:
-          seo?.description ?? "Astro starter with Typescript and Tailwind.",
+          seo?.description ??
+          "Find out what game Jacob Proffer is playing on Steam.",
       },
       {
         name: "og:site_name",
