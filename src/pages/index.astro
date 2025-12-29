@@ -8,7 +8,7 @@ import Panel from "@components/Panel.astro";
 import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
 import RecentGames from "@components/RecentGames.astro";
-import Footer from "@components/Footer.astro";
+import Information from "@components/Information.astro";
 
 const key = import.meta.env.STEAM_API_KEY;
 const steamID = import.meta.env.STEAM_USER_ID;
@@ -76,7 +76,7 @@ const pageTitle = `What is ${userName} Playing`;
       <Biography location={userCountry} joined={userJoined} />
       <Favorites />
       <RecentGames games={games} />
-      <Footer />
+      <Information />
     </Panel>
     <Backgrounds currentGame={userIsPlaying} />
   </Grid>
