@@ -9,61 +9,37 @@ import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
 import RecentGames from "@components/RecentGames.astro";
 import Information from "@components/Information.astro";
+import {
+  fetchPlayerProfile,
+  fetchRecentlyPlayedGames,
+} from "@utils/steamAPI.js";
+import { determineUserStatus } from "@utils/userStatus.js";
+import type { SteamPlayer, Game } from "../types/steam";
 
 const key = import.meta.env.STEAM_API_KEY;
 const steamID = import.meta.env.STEAM_USER_ID;
 
-// Fetch user profile
-const profileURL = `https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=${key}&steamids=${steamID}`;
-const profileResponse = await fetch(profileURL);
-const profileData = await profileResponse.json();
-const player = profileData?.response?.players[0];
+// Fetch user data with error handling
+let player: SteamPlayer | null = null;
+let games: Game[] | null = null;
 
-// Fetch recent games
-const gamesURL = `https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${key}&steamid=${steamID}`;
-const gamesResponse = await fetch(gamesURL);
-const gamesData = await gamesResponse.json();
-const games = gamesData?.response?.games;
+try {
+  player = await fetchPlayerProfile(key, steamID);
+  games = await fetchRecentlyPlayedGames(key, steamID);
+} catch (error) {
+  console.error("Error fetching Steam data:", error);
+}
 
-// Determine status
-let statusClass = "not-playing";
-let headline = "Offline";
-let status = "";
-
+// Extract user data
 const userName = player?.realname;
 const userIsPlaying = player?.gameextrainfo;
-const userIsPlayingId = player?.gameid;
-const userStatus = player?.personastate;
 const userAvatar = player?.avatarfull;
 const userURL = player?.profileurl;
-const userLastOnline = player?.lastlogoff;
 const userCountry = player?.loccountrycode;
 const userJoined = player?.timecreated;
 
-if (userIsPlaying) {
-  statusClass = "text-green";
-  headline = `${userName} is online`;
-  status = `Currently playing <a href="https://store.steampowered.com/app/${userIsPlayingId}" target="_blank">${userIsPlaying}</a>.`;
-} else if (userStatus > 0) {
-  statusClass = "text-yellow";
-  headline = `${userName} is online`;
-  status = "Currently on the Steam dashboard.";
-} else {
-  statusClass = "text-red";
-  headline = "Offline";
-  const lastOnlineDate = userLastOnline
-    ? new Date(userLastOnline * 1000)
-    : null;
-  const lastOnlineISO = lastOnlineDate?.toISOString();
-  const lastOnlineFormatted = lastOnlineDate?.toLocaleString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  status = `${lastOnlineDate ? ` Last seen <time datetime="${lastOnlineISO}">${lastOnlineFormatted}</time>.` : ""}`;
-}
+// Determine status
+const { statusClass, headline, status } = determineUserStatus(player);
 
 const pageTitle = `What is ${userName} Playing`;
 ---
@@ -73,11 +49,14 @@ const pageTitle = `What is ${userName} Playing`;
   <Grid>
     <Hero statusClass={statusClass} status={status} headline={headline} />
     <Panel>
-      <Biography location={userCountry} joined={userJoined} />
+      <Biography
+        location={userCountry || ""}
+        joined={userJoined?.toString() || ""}
+      />
       <Favorites />
-      <RecentGames games={games} />
+      <RecentGames games={games || []} />
       <Information />
     </Panel>
-    <Backgrounds currentGame={userIsPlaying} />
+    <Backgrounds currentGame={userIsPlaying || ""} />
   </Grid>
 </BaseLayout>
