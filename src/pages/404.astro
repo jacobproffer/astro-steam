@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Header from "@components/Header.astro";
-import Main from "@components/Main.astro";
+import Grid from "@components/Grid.astro";
 import Hero from "@components/Hero.astro";
 import Panel from "@components/Panel.astro";
 import Section from "@components/Section.astro";
@@ -11,7 +11,7 @@ const pageTitle = "404";
 
 <BaseLayout pageTitle="404">
   <Header />
-  <Main>
+  <Grid>
     <Hero
       headline={pageTitle}
       statusClass="text-red"
@@ -25,5 +25,5 @@ const pageTitle = "404";
       </Section>
     </Panel>
     <Backgrounds currentGame="" />
-  </Main>
+  </Grid>
 </BaseLayout>
