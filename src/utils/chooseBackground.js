@@ -9,7 +9,7 @@ const chooseBackground = (game) => {
             return armaBackground;
         case 'Left 4 Dead 2':
             return left4Dead2Background;
-        case 'Runescape':
+        case 'RuneScape':
             return runescapeBackground;
         default:
             return defaultBackground;
