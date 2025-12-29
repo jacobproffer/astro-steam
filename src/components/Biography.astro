@@ -25,7 +25,7 @@ const { location, joined } = Astro.props;
       joined && (
         <li class="flex items-center gap-2">
           <Person width={13} height={14} aria-hidden="true" />
-          Joined Steam in{" "}
+          Joined Steam on{" "}
           <time
             class="text-blue"
             datetime={new Date(parseInt(joined) * 1000).toISOString()}
