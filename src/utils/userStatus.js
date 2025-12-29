@@ -29,7 +29,7 @@ export function determineUserStatus(player) {
     // User is currently in a game
     if (userIsPlaying) {
         return {
-            statusClass: "text-green",
+            statusClass: "text-blue",
             headline: `${userName} is online`,
             status: `Currently playing <a href="https://store.steampowered.com/app/${userIsPlayingId}" target="_blank" rel="noopener noreferrer">${userIsPlaying}</a>.`,
         };
