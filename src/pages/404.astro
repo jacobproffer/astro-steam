@@ -1,16 +1,18 @@
 ---
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Header from "@components/Header.astro";
-import Main from "@components/Main.astro";
+import Grid from "@components/Grid.astro";
 import Hero from "@components/Hero.astro";
 import Panel from "@components/Panel.astro";
 import Section from "@components/Section.astro";
+import Information from "@components/Information.astro";
+import Backgrounds from "@components/Backgrounds.astro";
 const pageTitle = "404";
 ---
 
 <BaseLayout pageTitle="404">
   <Header />
-  <Main>
+  <Grid>
     <Hero
       headline={pageTitle}
       statusClass="text-red"
@@ -22,6 +24,8 @@ const pageTitle = "404";
           Please check the URL or return to the <a href="/">homepage</a>.
         </p>
       </Section>
+      <Information />
     </Panel>
-  </Main>
+    <Backgrounds currentGame="" />
+  </Grid>
 </BaseLayout>

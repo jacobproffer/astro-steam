@@ -22,7 +22,3 @@
     opacity: 1;
   }
 }
-
-body {
-  animation: fadeIn 0.6s ease-in;
-}

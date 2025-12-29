@@ -1,0 +1,20 @@
+---
+import Section from "@components/Section.astro";
+import ExternalLink from "@components/ExternalLink.astro";
+---
+
+<Section headline="Site Information">
+  <p>
+    This site is built by <ExternalLink
+      url="https://proffer.dev/"
+      title="Jacob Proffer"
+    /> with <ExternalLink url="https://astro.build/" title="Astro" />, the <ExternalLink
+      url="https://steamcommunity.com/dev"
+      title="Steam API"
+    />, <ExternalLink url="https://tailwindcss.com/" title="Tailwind CSS" />,
+    and <ExternalLink
+      url="https://www.typescriptlang.org/"
+      title="TypeScript"
+    />.
+  </p>
+</Section>

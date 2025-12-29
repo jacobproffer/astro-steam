@@ -33,7 +33,9 @@ const { pageTitle, pageDescription } = Astro.props;
     <link rel="manifest" href="/favicons/site.webmanifest" />
     <SiteSEO seo={{ title: pageTitle, description: pageDescription }} />
   </head>
-  <body class="relative h-full text-white bg-black">
+  <body
+    class="relative h-full text-white bg-black animate-[fadeIn_0.6s_ease-in] [animation-timeline:auto]"
+  >
     <slot />
   </body>
 </html>

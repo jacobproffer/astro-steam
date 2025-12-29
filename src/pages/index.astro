@@ -2,12 +2,13 @@
 import BaseLayout from "@layouts/BaseLayout.astro";
 import Backgrounds from "@components/Backgrounds.astro";
 import Header from "@components/Header.astro";
-import Main from "@components/Main.astro";
+import Grid from "@components/Grid.astro";
 import Hero from "@components/Hero.astro";
 import Panel from "@components/Panel.astro";
 import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
 import RecentGames from "@components/RecentGames.astro";
+import Information from "@components/Information.astro";
 
 const key = import.meta.env.STEAM_API_KEY;
 const steamID = import.meta.env.STEAM_USER_ID;
@@ -69,13 +70,14 @@ const pageTitle = `What is ${userName} Playing`;
 
 <BaseLayout pageTitle={pageTitle}>
   <Header userURL={userURL} userAvatar={userAvatar} />
-  <Main>
+  <Grid>
     <Hero statusClass={statusClass} status={status} headline={headline} />
     <Panel>
       <Biography location={userCountry} joined={userJoined} />
       <Favorites />
       <RecentGames games={games} />
+      <Information />
     </Panel>
     <Backgrounds currentGame={userIsPlaying} />
-  </Main></BaseLayout
->
+  </Grid>
+</BaseLayout>
