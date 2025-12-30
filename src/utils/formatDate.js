@@ -18,6 +18,7 @@ export function formatLastOnline(timestamp) {
             year: "numeric",
             hour: "numeric",
             minute: "2-digit",
+            timeZone: "America/New_York",
         }),
     };
 }
