@@ -5,8 +5,7 @@ import playTime from "@utils/playTime.js";
 interface Game {
   name: string;
   playtime_2weeks?: number;
-  playtime_windows_forever?: number;
-  playtime_mac_forever?: number;
+  playtime_forever: number;
 }
 
 interface Props {
@@ -14,27 +13,21 @@ interface Props {
 }
 
 const { games } = Astro.props;
-
-// Calculate total playtime from Windows and Mac
-const getTotalPlaytime = (game: Game) => {
-  const windowsTime = game.playtime_windows_forever || 0;
-  const macTime = game.playtime_mac_forever || 0;
-  return windowsTime + macTime;
-};
 ---
 
 <Section headline="Recent Activity">
   <ol class="flex flex-col gap-4">
     {
       games.map((game) => {
-        const totalPlaytime = getTotalPlaytime(game);
         return (
           <li class="flex md:items-center md:justify-between max-md:flex-col py-4 px-6 bg-black border border-gray rounded-lg">
             <h3 class="text-2xl max-md:text-lg font-share-tech">{game.name}</h3>
             <div class="flex flex-col md:items-end">
               <span class="text-blue">{playTime(game.playtime_2weeks)}</span>
-              {totalPlaytime > 0 && (
-                <span class="text-sm">{playTime(totalPlaytime)} total</span>
+              {game.playtime_forever > 0 && (
+                <span class="text-sm">
+                  {playTime(game.playtime_forever)} total
+                </span>
               )}
             </div>
           </li>
