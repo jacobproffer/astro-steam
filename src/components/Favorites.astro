@@ -1,31 +1,49 @@
 ---
-import { Image } from "astro:assets";
 import Section from "@components/Section.astro";
-import L4D from "@assets/img/left-4-dead-2-thumbnail.jpg";
-import Arma3 from "@assets/img/arma-3-thumbnail.jpg";
+import playTime from "@utils/playTime.js";
+
+interface OwnedGame {
+  appid: number;
+  name: string;
+  playtime_forever: number;
+  img_icon_url: string;
+  img_logo_url: string;
+}
+
+interface Props {
+  games: OwnedGame[];
+}
+
+const { games } = Astro.props;
+
+// Helper function to get Steam header image URL
+const getHeaderImageUrl = (appid: number) => {
+  return `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/header.jpg`;
+};
 ---
 
 <Section headline="Favorite Games">
-  <ul class="grid grid-cols-2 items-center gap-4 max-w-max">
-    <li>
-      <Image
-        class="border border-gray rounded-lg"
-        src={L4D}
-        alt="Left 4 Dead 2"
-        widths={[230, 460]}
-        sizes={`(max-width: 767px) 230px, 460px`}
-        loading="eager"
-      />
-    </li>
-    <li>
-      <Image
-        class="border border-gray rounded-lg"
-        src={Arma3}
-        alt="Arma 3"
-        widths={[230, 460]}
-        sizes={`(max-width: 767px) 230px, 460px`}
-        loading="eager"
-      />
-    </li>
-  </ul>
+  {
+    games.length > 0 ? (
+      <ul class="grid grid-cols-2 items-center gap-4 max-w-max">
+        {games.slice(0, 2).map((game) => (
+          <li>
+            <img
+              class="border border-gray rounded-lg"
+              src={getHeaderImageUrl(game.appid)}
+              alt={game.name}
+              width="460"
+              height="215"
+              loading="eager"
+            />
+            <p class="text-sm text-center mt-2">
+              {playTime(game.playtime_forever)} played
+            </p>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-gray">No games data available</p>
+    )
+  }
 </Section>

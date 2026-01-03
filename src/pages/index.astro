@@ -12,9 +12,10 @@ import Information from "@components/Information.astro";
 import {
   fetchPlayerProfile,
   fetchRecentlyPlayedGames,
+  fetchOwnedGames,
 } from "@utils/steamAPI.js";
 import { determineUserStatus } from "@utils/userStatus.js";
-import type { SteamPlayer, Game } from "../types/steam";
+import type { SteamPlayer, Game, OwnedGame } from "../types/steam";
 
 const key = import.meta.env.STEAM_API_KEY;
 const steamID = import.meta.env.STEAM_USER_ID;
@@ -22,10 +23,20 @@ const steamID = import.meta.env.STEAM_USER_ID;
 // Fetch user data with error handling
 let player: SteamPlayer | null = null;
 let games: Game[] | null = null;
+let ownedGames: OwnedGame[] | null = null;
+let topGames: OwnedGame[] = [];
 
 try {
   player = await fetchPlayerProfile(key, steamID);
   games = await fetchRecentlyPlayedGames(key, steamID);
+  ownedGames = await fetchOwnedGames(key, steamID);
+
+  // Get top 3 games by playtime
+  if (ownedGames) {
+    topGames = [...ownedGames]
+      .sort((a, b) => b.playtime_forever - a.playtime_forever)
+      .slice(0, 3);
+  }
 } catch (error) {
   console.error("Error fetching Steam data:", error);
 }
@@ -53,7 +64,7 @@ const pageTitle = `What is ${userName} Playing`;
         location={userCountry || ""}
         joined={userJoined?.toString() || ""}
       />
-      <Favorites />
+      <Favorites games={topGames} />
       <RecentGames games={games || []} />
       <Information />
     </Panel>
