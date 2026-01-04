@@ -2,13 +2,49 @@
 import Section from "@components/Section.astro";
 import Globe from "@assets/img/globe.svg";
 import Person from "@assets/img/person.svg";
+import playTime from "@utils/playTime.js";
+import type { OwnedGame } from "../types/steam";
 
 interface Props {
   location: string;
   joined: string;
+  personaname?: string;
+  games?: OwnedGame[];
 }
 
-const { location, joined } = Astro.props;
+const { location, joined, personaname, games = [] } = Astro.props;
+
+// Calculate account statistics
+const yearsOnSteam = joined
+  ? Math.floor(
+      (Date.now() - parseInt(joined) * 1000) / (1000 * 60 * 60 * 24 * 365)
+    )
+  : 0;
+
+const totalGames = games.length;
+
+const totalHours = games.reduce(
+  (sum, game) => sum + (game.playtime_forever ?? 0),
+  0
+);
+
+const mostPlayedGame =
+  games.length > 0
+    ? games.reduce((max, game) =>
+        (game.playtime_forever ?? 0) > (max.playtime_forever ?? 0) ? game : max
+      )
+    : null;
+
+// Generate dynamic biography text
+const accountSummary =
+  personaname && yearsOnSteam > 0 && totalGames > 0
+    ? `${personaname} has been a Steam member for ${yearsOnSteam} ${yearsOnSteam === 1 ? "year" : "years"} with ${totalGames} ${totalGames === 1 ? "game" : "games"} in their library.`
+    : "";
+
+const gamingHabits =
+  mostPlayedGame && totalHours > 0
+    ? `With ${playTime(totalHours)} played, their most-played game is ${mostPlayedGame.name} at ${playTime(mostPlayedGame.playtime_forever ?? 0)}.`
+    : "";
 ---
 
 <Section headline="Biography">
@@ -40,10 +76,11 @@ const { location, joined } = Astro.props;
       )
     }
   </ul>
-  <p class="max-w-prose">
-    In 2004, Jacob Proffer joined the PC gaming community with Counter Strike:
-    Condition Zero and Counter Strike: Source. Returning full-time to PC gaming
-    in 2016, he plays first person shooter and zombie themed games, such as Arma
-    3 and Left 4 Dead 2.
-  </p>
+  {
+    (accountSummary || gamingHabits) && (
+      <p class="max-w-prose">
+        {accountSummary} {gamingHabits}
+      </p>
+    )
+  }
 </Section>
