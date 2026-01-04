@@ -53,16 +53,9 @@ const mostPlayedGame =
       })()
     : null;
 
-// Generate dynamic biography text
-const accountSummary =
-  personaname && yearsOnSteam > 0 && totalGames > 0
-    ? `${personaname} has been a Steam member for ${yearsOnSteam} ${yearsOnSteam === 1 ? "year" : "years"} with ${totalGames} ${totalGames === 1 ? "game" : "games"} in their library.`
-    : "";
-
-const gamingHabits =
-  mostPlayedGame && totalMinutes > 0
-    ? `With ${playTime(totalMinutes)} played, their most-played game is ${mostPlayedGame.name} at ${playTime(mostPlayedGame.playtime_forever ?? 0)}.`
-    : "";
+const showBiography =
+  (personaname && yearsOnSteam > 0 && totalGames > 0) ||
+  (mostPlayedGame && totalMinutes > 0);
 ---
 
 <Section headline="Biography">
@@ -95,9 +88,33 @@ const gamingHabits =
     }
   </ul>
   {
-    (accountSummary || gamingHabits) && (
+    showBiography && (
       <p class="max-w-prose">
-        {accountSummary} {gamingHabits}
+        {personaname && yearsOnSteam > 0 && totalGames > 0 && (
+          <>
+            <span class="text-blue">{personaname}</span> has been a Steam member
+            for{" "}
+            <span class="text-blue">
+              {yearsOnSteam} {yearsOnSteam === 1 ? "year" : "years"}
+            </span>{" "}
+            with{" "}
+            <span class="text-blue">
+              {totalGames} {totalGames === 1 ? "game" : "games"}
+            </span>{" "}
+            in their library.{" "}
+          </>
+        )}
+        {mostPlayedGame && totalMinutes > 0 && (
+          <>
+            With <span class="text-blue">{playTime(totalMinutes)}</span> played,
+            their most-played game is{" "}
+            <span class="text-blue">{mostPlayedGame.name}</span> at{" "}
+            <span class="text-blue">
+              {playTime(mostPlayedGame.playtime_forever ?? 0)}
+            </span>
+            .
+          </>
+        )}
       </p>
     )
   }
