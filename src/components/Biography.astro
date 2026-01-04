@@ -16,23 +16,41 @@ const { location, joined, personaname, games = [] } = Astro.props;
 
 // Calculate account statistics
 const yearsOnSteam = joined
-  ? Math.floor(
-      (Date.now() - parseInt(joined) * 1000) / (1000 * 60 * 60 * 24 * 365)
-    )
+  ? (() => {
+      const joinedDate = new Date(parseInt(joined) * 1000);
+      const now = new Date();
+      let years = now.getFullYear() - joinedDate.getFullYear();
+
+      // Adjust if the current date hasn't reached the anniversary yet this year
+      const monthDiff = now.getMonth() - joinedDate.getMonth();
+      const dayDiff = now.getDate() - joinedDate.getDate();
+
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        years--;
+      }
+
+      return years;
+    })()
   : 0;
 
 const totalGames = games.length;
 
-const totalHours = games.reduce(
+const totalMinutes = games.reduce(
   (sum, game) => sum + (game.playtime_forever ?? 0),
   0
 );
 
 const mostPlayedGame =
   games.length > 0
-    ? games.reduce((max, game) =>
-        (game.playtime_forever ?? 0) > (max.playtime_forever ?? 0) ? game : max
-      )
+    ? (() => {
+        const topGame = games.reduce((max, game) =>
+          (game.playtime_forever ?? 0) > (max.playtime_forever ?? 0)
+            ? game
+            : max
+        );
+        // Only return if it has actual playtime
+        return (topGame.playtime_forever ?? 0) > 0 ? topGame : null;
+      })()
     : null;
 
 // Generate dynamic biography text
@@ -42,8 +60,8 @@ const accountSummary =
     : "";
 
 const gamingHabits =
-  mostPlayedGame && totalHours > 0
-    ? `With ${playTime(totalHours)} played, their most-played game is ${mostPlayedGame.name} at ${playTime(mostPlayedGame.playtime_forever ?? 0)}.`
+  mostPlayedGame && totalMinutes > 0
+    ? `With ${playTime(totalMinutes)} played, their most-played game is ${mostPlayedGame.name} at ${playTime(mostPlayedGame.playtime_forever ?? 0)}.`
     : "";
 ---
 
