@@ -2,13 +2,60 @@
 import Section from "@components/Section.astro";
 import Globe from "@assets/img/globe.svg";
 import Person from "@assets/img/person.svg";
+import playTime from "@utils/playTime.js";
+import type { OwnedGame } from "../types/steam";
 
 interface Props {
   location: string;
   joined: string;
+  personaname?: string;
+  games?: OwnedGame[];
 }
 
-const { location, joined } = Astro.props;
+const { location, joined, personaname, games = [] } = Astro.props;
+
+// Calculate account statistics
+const yearsOnSteam = joined
+  ? (() => {
+      const joinedDate = new Date(parseInt(joined) * 1000);
+      const now = new Date();
+      let years = now.getFullYear() - joinedDate.getFullYear();
+
+      // Adjust if the current date hasn't reached the anniversary yet this year
+      const monthDiff = now.getMonth() - joinedDate.getMonth();
+      const dayDiff = now.getDate() - joinedDate.getDate();
+
+      if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
+        years--;
+      }
+
+      return years;
+    })()
+  : 0;
+
+const totalGames = games.length;
+
+const totalMinutes = games.reduce(
+  (sum, game) => sum + (game.playtime_forever ?? 0),
+  0
+);
+
+const mostPlayedGame =
+  games.length > 0
+    ? (() => {
+        const topGame = games.reduce((max, game) =>
+          (game.playtime_forever ?? 0) > (max.playtime_forever ?? 0)
+            ? game
+            : max
+        );
+        // Only return if it has actual playtime
+        return (topGame.playtime_forever ?? 0) > 0 ? topGame : null;
+      })()
+    : null;
+
+const showBiography =
+  (personaname && yearsOnSteam > 0 && totalGames > 0) ||
+  (mostPlayedGame && totalMinutes > 0);
 ---
 
 <Section headline="Biography">
@@ -40,10 +87,35 @@ const { location, joined } = Astro.props;
       )
     }
   </ul>
-  <p class="max-w-prose">
-    In 2004, Jacob Proffer joined the PC gaming community with Counter Strike:
-    Condition Zero and Counter Strike: Source. Returning full-time to PC gaming
-    in 2016, he plays first person shooter and zombie themed games, such as Arma
-    3 and Left 4 Dead 2.
-  </p>
+  {
+    showBiography && (
+      <p class="max-w-prose">
+        {personaname && yearsOnSteam > 0 && totalGames > 0 && (
+          <>
+            <span class="text-blue">{personaname}</span> has been a Steam member
+            for{" "}
+            <span class="text-blue">
+              {yearsOnSteam} {yearsOnSteam === 1 ? "year" : "years"}
+            </span>{" "}
+            with{" "}
+            <span class="text-blue">
+              {totalGames} {totalGames === 1 ? "game" : "games"}
+            </span>{" "}
+            in their library.{" "}
+          </>
+        )}
+        {mostPlayedGame && totalMinutes > 0 && (
+          <>
+            With <span class="text-blue">{playTime(totalMinutes)}</span> played,
+            their most-played game is{" "}
+            <span class="text-blue">{mostPlayedGame.name}</span> at{" "}
+            <span class="text-blue">
+              {playTime(mostPlayedGame.playtime_forever ?? 0)}
+            </span>
+            .
+          </>
+        )}
+      </p>
+    )
+  }
 </Section>

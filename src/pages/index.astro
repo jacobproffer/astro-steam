@@ -63,6 +63,7 @@ try {
 
 // Extract user data
 const userName = player?.realname;
+const userPersonaName = player?.personaname;
 const userIsPlaying = player?.gameextrainfo;
 const userAvatar = player?.avatarfull;
 const userURL = player?.profileurl;
@@ -83,6 +84,8 @@ const pageTitle = `What is ${userName} Playing`;
       <Biography
         location={userCountry || ""}
         joined={userJoined?.toString() || ""}
+        personaname={userPersonaName}
+        games={ownedGames || []}
       />
       <Favorites games={topGames} />
       <RecentGames games={games || []} />
