@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import Logo from "@assets/img/logo.svg";
 
 interface Props {
@@ -28,10 +29,12 @@ const { userURL, userAvatar } = Astro.props;
         rel="noopener noreferrer"
       >
         {userAvatar && (
-          <img
+          <Image
             class="w-10 h-10 rounded-full"
             src={userAvatar}
-            alt=""
+            alt="Steam avatar"
+            width={40}
+            height={40}
             loading="eager"
           />
         )}

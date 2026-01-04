@@ -1,10 +1,12 @@
 /**
  * @typedef {import('../types/steam').SteamPlayer} SteamPlayer
  * @typedef {import('../types/steam').Game} Game
+ * @typedef {import('../types/steam').OwnedGame} OwnedGame
  */
 
 // Steam API constants
 export const STEAM_API_BASE_URL = "https://api.steampowered.com";
+export const STEAM_CDN_BASE_URL = "https://cdn.cloudflare.steamstatic.com";
 
 export const PERSONA_STATE = {
     OFFLINE: 0,
@@ -15,6 +17,15 @@ export const PERSONA_STATE = {
     LOOKING_TO_TRADE: 5,
     LOOKING_TO_PLAY: 6,
 };
+
+/**
+ * Generates Steam CDN URL for game header image
+ * @param {number} appid - The Steam app ID
+ * @returns {string} The full URL to the game's header image
+ */
+export function getGameHeaderImageUrl(appid) {
+    return `${STEAM_CDN_BASE_URL}/steam/apps/${appid}/header.jpg`;
+}
 
 /**
  * Fetches data from Steam API with error handling
@@ -58,6 +69,18 @@ export async function fetchPlayerProfile(key, steamID) {
  */
 export async function fetchRecentlyPlayedGames(key, steamID) {
     const url = `${STEAM_API_BASE_URL}/IPlayerService/GetRecentlyPlayedGames/v0001/?key=${key}&steamid=${steamID}`;
+    const data = await fetchSteamAPI(url);
+    return data?.response?.games || null;
+}
+
+/**
+ * Fetches all owned games for a Steam user
+ * @param {string} key - Steam API key
+ * @param {string} steamID - Steam user ID
+ * @returns {Promise<OwnedGame[]|null>} Array of owned games or null if none found
+ */
+export async function fetchOwnedGames(key, steamID) {
+    const url = `${STEAM_API_BASE_URL}/IPlayerService/GetOwnedGames/v0001/?key=${key}&steamid=${steamID}&include_appinfo=1&include_played_free_games=1`;
     const data = await fetchSteamAPI(url);
     return data?.response?.games || null;
 }
