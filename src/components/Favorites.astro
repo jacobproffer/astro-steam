@@ -1,46 +1,39 @@
 ---
+import { Image } from "astro:assets";
 import Section from "@components/Section.astro";
 import playTime from "@utils/playTime.js";
-
-interface OwnedGame {
-  appid: number;
-  name: string;
-  playtime_forever: number;
-  img_icon_url: string;
-  img_logo_url: string;
-}
+import { getGameHeaderImageUrl } from "@utils/steamAPI.js";
+import type { OwnedGame } from "../types/steam";
 
 interface Props {
   games: OwnedGame[];
 }
 
 const { games } = Astro.props;
-
-// Helper function to get Steam header image URL
-const getHeaderImageUrl = (appid: number) => {
-  return `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/header.jpg`;
-};
 ---
 
 <Section headline="Favorite Games">
   {
     games.length > 0 ? (
       <ul class="grid grid-cols-2 items-center gap-4 max-w-max">
-        {games.slice(0, 2).map((game) => (
-          <li>
-            <img
-              class="border border-gray rounded-lg"
-              src={getHeaderImageUrl(game.appid)}
-              alt={game.name}
-              width="460"
-              height="215"
-              loading="eager"
-            />
-            <p class="text-sm text-center mt-2">
-              {playTime(game.playtime_forever)} played
-            </p>
-          </li>
-        ))}
+        {games
+          .slice(0, 2)
+          .filter((game) => game.name && game.appid)
+          .map((game) => (
+            <li>
+              <Image
+                class="border border-gray rounded-lg"
+                src={getGameHeaderImageUrl(game.appid)}
+                alt={game.name || "Unknown Game"}
+                width={460}
+                height={215}
+                loading="eager"
+              />
+              <p class="text-sm text-center mt-2">
+                {playTime(game.playtime_forever ?? 0)} played
+              </p>
+            </li>
+          ))}
       </ul>
     ) : (
       <p class="text-gray">No games data available</p>

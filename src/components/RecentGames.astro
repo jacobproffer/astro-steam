@@ -18,21 +18,27 @@ const { games } = Astro.props;
 <Section headline="Recent Activity">
   <ol class="flex flex-col gap-4">
     {
-      games.map((game) => {
-        return (
-          <li class="flex md:items-center md:justify-between max-md:flex-col py-4 px-6 bg-black border border-gray rounded-lg">
-            <h3 class="text-2xl max-md:text-lg font-share-tech">{game.name}</h3>
-            <div class="flex flex-col md:items-end">
-              <span class="text-blue">{playTime(game.playtime_2weeks)}</span>
-              {game.playtime_forever > 0 && (
-                <span class="text-sm">
-                  {playTime(game.playtime_forever)} total
+      games
+        .filter((game) => game.name)
+        .map((game) => {
+          return (
+            <li class="flex md:items-center md:justify-between max-md:flex-col py-4 px-6 bg-black border border-gray rounded-lg">
+              <h3 class="text-2xl max-md:text-lg font-share-tech">
+                {game.name}
+              </h3>
+              <div class="flex flex-col md:items-end">
+                <span class="text-blue">
+                  {playTime(game.playtime_2weeks ?? 0)}
                 </span>
-              )}
-            </div>
-          </li>
-        );
-      })
+                {(game.playtime_forever ?? 0) > 0 && (
+                  <span class="text-sm">
+                    {playTime(game.playtime_forever ?? 0)} total
+                  </span>
+                )}
+              </div>
+            </li>
+          );
+        })
     }
   </ol>
 </Section>
