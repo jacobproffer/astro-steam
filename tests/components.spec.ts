@@ -130,7 +130,7 @@ test.describe("Steam Component Accessibility", () => {
     await expect(h1).toBeVisible();
 
     const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["landmark"])
+      .withRules(["region", "landmark-one-main", "landmark-unique"])
       .analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
