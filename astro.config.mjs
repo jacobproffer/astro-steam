@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, svgoOptimizer } from 'astro/config';
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 import netlify from "@astrojs/netlify";
@@ -15,4 +15,13 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
+  experimental: {
+    svgOptimizer: svgoOptimizer({
+      multipass: true,
+      plugins: [
+        'preset-default',
+        'removeXMLNS',
+      ]
+    })
+  }
 });
