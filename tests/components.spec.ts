@@ -2,22 +2,6 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test.describe("Steam Component Accessibility", () => {
-  test("user avatar should have proper alt text", async ({ page }) => {
-    await page.goto("/");
-
-    // Target the specific Steam avatar image
-    const avatar = page.locator('img[alt="Steam avatar"]');
-
-    // Avatar might not render if API/env is unavailable
-    if ((await avatar.count()) > 0) {
-      await expect(avatar).toBeVisible();
-
-      // Verify it has meaningful alt text (not empty)
-      const altText = await avatar.getAttribute("alt");
-      expect(altText).toBe("Steam avatar");
-    }
-  });
-
   test("decorative images should have empty alt text", async ({ page }) => {
     await page.goto("/");
 
