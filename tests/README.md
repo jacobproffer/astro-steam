@@ -36,7 +36,7 @@ npm run test:report
 
 - Skip link is the first focusable element and navigates to main content
 - Avatar images have descriptive alt text
-- Decorative images have empty alt text
+- Informative images have descriptive alt text; decorative images use empty alt text
 - Status indicators are accessible to screen readers
 - Keyboard navigation works for all interactive elements
 - All buttons and links have accessible names
