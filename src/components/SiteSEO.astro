@@ -10,43 +10,55 @@ const { seo } = Astro.props;
 
 const siteName = "What is Jacob Playing";
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const description =
+  seo?.description ?? "Find out what game Jacob Proffer is playing on Steam.";
 ---
 
 <SEO
-  title={seo?.title}
-  description={seo?.description ??
-    "Find out what game Jacob Proffer is playing on Steam."}
-  canonical={canonicalURL}
+  title={seo?.title ?? "What is Jacob Playing"}
+  titleTemplate="%s | What is Jacob Playing"
+  titleDefault="What is Jacob Playing"
+  description={description}
+  canonical={canonicalURL.toString()}
+  charset="UTF-8"
   openGraph={{
     basic: {
-      url: canonicalURL,
       title: seo?.title ?? "What is Jacob Playing",
       type: "website",
       image: defaultImageFile.toString(),
+      url: canonicalURL.toString(),
+    },
+    optional: {
+      description: description,
+      locale: "en_US",
+      siteName: siteName,
     },
     image: {
-      url: defaultImageFile.toString(),
       secureUrl: defaultImageFile.toString(),
-      alt: "",
-      height: 1200,
+      alt: "What is Jacob Playing - Steam gaming profile preview",
       width: 800,
+      height: 1200,
+      type: "image/png",
     },
+  }}
+  twitter={{
+    card: "summary_large_image",
+    site: "@jacobproffer",
+    creator: "@jacobproffer",
+    title: seo?.title ?? "What is Jacob Playing",
+    description: description,
+    image: defaultImageFile.toString(),
+    imageAlt: "What is Jacob Playing - Steam gaming profile preview",
   }}
   extend={{
     meta: [
       {
-        name: "og:locale",
-        content: "en_US",
+        name: "keywords",
+        content: "steam, gaming, jacob proffer, currently playing, video games",
       },
       {
-        name: "og:description",
-        content:
-          seo?.description ??
-          "Find out what game Jacob Proffer is playing on Steam.",
-      },
-      {
-        name: "og:site_name",
-        content: siteName,
+        name: "theme-color",
+        content: "#1b2838",
       },
     ],
   }}
