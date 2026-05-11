@@ -19,9 +19,13 @@ test.describe("Steam Component Accessibility", () => {
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(/#main-content$/);
 
-    // Verify the main content element exists
+    // Verify the main content element exists and is visible
     const mainContent = page.locator("#main-content");
     await expect(mainContent).toBeVisible();
+
+    // Verify focus actually moved to the main content element
+    const focusedAfterSkip = page.locator(":focus");
+    await expect(focusedAfterSkip).toHaveAttribute("id", "main-content");
   });
 
   test("decorative images should have empty alt text", async ({ page }) => {
