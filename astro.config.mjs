@@ -16,6 +16,12 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
   experimental: {
-    svgOptimizer: svgoOptimizer()
+    svgOptimizer: svgoOptimizer({
+      multipass: true,
+      plugins: [
+        'preset-default',
+        'removeXMLNS',
+      ]
+    })
   }
 });
