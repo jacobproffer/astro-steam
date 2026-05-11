@@ -15,6 +15,6 @@ const { statusClass, status, headline } = Astro.props;
         <h1 class="text-6xl max-md:text-4xl font-share-tech">{headline}</h1>
       )
     }
-    {status && <p class={statusClass} set:html={status} />}
+    {status && <p class={statusClass} id="status" set:html={status} />}
   </div>
 </section>

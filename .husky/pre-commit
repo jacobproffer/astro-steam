@@ -1,0 +1,5 @@
+# Tests run on pre-push instead (see .husky/pre-push)
+
+# Uncomment the line below to run tests before every commit:
+
+# npm test
