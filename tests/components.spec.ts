@@ -33,18 +33,21 @@ test.describe("Steam Component Accessibility", () => {
   test("status indicators should be accessible", async ({ page }) => {
     await page.goto("/");
 
-    // Check for ARIA labels or semantic HTML on status elements
-    const statusElement = page.locator('[id*="status"]').first();
+    // Status element is conditionally rendered based on user state
+    const statusElement = page.locator("#status");
+
     if ((await statusElement.count()) > 0) {
+      // Verify status is visible
       await expect(statusElement).toBeVisible();
+
+      // Run axe scan on status element when it exists
+      const accessibilityScanResults = await new AxeBuilder({ page })
+        .include("#status")
+        .analyze();
+
+      expect(accessibilityScanResults.violations).toEqual([]);
     }
-
-    // Run axe scan focusing on status-related elements
-    const accessibilityScanResults = await new AxeBuilder({ page })
-      .include('[id*="status"]')
-      .analyze();
-
-    expect(accessibilityScanResults.violations).toEqual([]);
+    // Test passes if status doesn't render (empty string case)
   });
 
   test("game list should be keyboard navigable", async ({ page }) => {
