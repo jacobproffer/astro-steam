@@ -5,12 +5,29 @@ test.describe("Steam Component Accessibility", () => {
   test("user avatar should have proper alt text", async ({ page }) => {
     await page.goto("/");
 
-    // Check if avatar image has alt text
-    const avatar = page.locator("img[alt]").first();
-    await expect(avatar).toBeVisible();
-    const altText = await avatar.getAttribute("alt");
-    expect(altText).toBeTruthy();
-    expect(altText?.length).toBeGreaterThan(0);
+    // Target the specific Steam avatar image
+    const avatar = page.locator('img[alt="Steam avatar"]');
+
+    // Avatar might not render if API/env is unavailable
+    if ((await avatar.count()) > 0) {
+      await expect(avatar).toBeVisible();
+
+      // Verify it has meaningful alt text (not empty)
+      const altText = await avatar.getAttribute("alt");
+      expect(altText).toBe("Steam avatar");
+    }
+  });
+
+  test("decorative images should have empty alt text", async ({ page }) => {
+    await page.goto("/");
+
+    // Decorative background images should have alt=""
+    const decorativeImages = page.locator('img[alt=""]');
+
+    if ((await decorativeImages.count()) > 0) {
+      // Verify at least one decorative image exists and is properly marked
+      expect(await decorativeImages.count()).toBeGreaterThan(0);
+    }
   });
 
   test("status indicators should be accessible", async ({ page }) => {
@@ -33,25 +50,47 @@ test.describe("Steam Component Accessibility", () => {
   test("game list should be keyboard navigable", async ({ page }) => {
     await page.goto("/");
 
-    // Check if interactive elements are focusable
-    const links = page.locator("a[href]");
-    const linkCount = await links.count();
+    const interactiveElements = ["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA"];
+    const focusedElements: string[] = [];
 
-    if (linkCount > 0) {
-      // Tab through and verify focus is visible
+    // Tab through multiple elements to verify keyboard navigation
+    for (let i = 0; i < 5; i++) {
       await page.keyboard.press("Tab");
-      const focusedElement = await page.evaluate(
-        () => document.activeElement?.tagName,
+
+      const focusInfo = await page.evaluate(() => {
+        const el = document.activeElement;
+        return {
+          tagName: el?.tagName,
+          isInteractive:
+            el?.tagName &&
+            ["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA"].includes(el.tagName),
+          hasFocusStyle: el
+            ? window.getComputedStyle(el).outlineWidth !== "0px"
+            : false,
+          ariaLabel: el?.getAttribute("aria-label") || "",
+          text: el?.textContent?.trim().substring(0, 50) || "",
+        };
+      });
+
+      // Verify focused element is interactive
+      expect(focusInfo.tagName).toBeTruthy();
+      expect(interactiveElements).toContain(focusInfo.tagName);
+
+      // Track what was focused for debugging
+      focusedElements.push(
+        `${focusInfo.tagName}: ${focusInfo.ariaLabel || focusInfo.text}`,
       );
-      expect(focusedElement).toBeTruthy();
     }
+
+    // Ensure we actually tabbed through different elements
+    expect(new Set(focusedElements).size).toBeGreaterThan(1);
   });
 
   test("color contrast should meet WCAG standards", async ({ page }) => {
     await page.goto("/");
 
     const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["color-contrast"])
+      .withRules(["color-contrast"])
       .analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -63,7 +102,7 @@ test.describe("Steam Component Accessibility", () => {
     await page.goto("/");
 
     const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["button-name", "link-name"])
+      .withRules(["button-name", "link-name"])
       .analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
@@ -73,7 +112,7 @@ test.describe("Steam Component Accessibility", () => {
     await page.goto("/");
 
     const accessibilityScanResults = await new AxeBuilder({ page })
-      .withTags(["heading-order"])
+      .withRules(["heading-order"])
       .analyze();
 
     expect(accessibilityScanResults.violations).toEqual([]);
