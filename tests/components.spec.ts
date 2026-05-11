@@ -2,20 +2,29 @@ import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 test.describe("Steam Component Accessibility", () => {
-  test("user avatar should have proper alt text", async ({ page }) => {
+  test("first focusable element is a skip link that navigates to main content", async ({
+    page,
+  }) => {
     await page.goto("/");
 
-    // Target the specific Steam avatar image
-    const avatar = page.locator('img[alt="Steam avatar"]');
+    // Tab to the first focusable element
+    await page.keyboard.press("Tab");
+    const focused = page.locator(":focus");
 
-    // Avatar might not render if API/env is unavailable
-    if ((await avatar.count()) > 0) {
-      await expect(avatar).toBeVisible();
+    // Verify it's the skip link
+    await expect(focused).toHaveAttribute("href", "#main-content");
+    await expect(focused).toHaveText("Skip to main content");
 
-      // Verify it has meaningful alt text (not empty)
-      const altText = await avatar.getAttribute("alt");
-      expect(altText).toBe("Steam avatar");
-    }
+    // Activate the skip link and verify it navigated to main content
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/#main-content$/);
+
+    // Verify the main content element exists and is visible
+    const mainContent = page.locator("#main-content");
+    await expect(mainContent).toBeVisible();
+
+    // Verify focus actually moved to the main content element
+    await expect(mainContent).toBeFocused();
   });
 
   test("decorative images should have empty alt text", async ({ page }) => {
