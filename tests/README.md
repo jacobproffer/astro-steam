@@ -41,6 +41,7 @@ npm run test:report
 - Keyboard navigation works for all interactive elements
 - All buttons and links have accessible names
 - Proper document structure with semantic HTML landmarks
+- Anchor links maintain proper contrast when hovered
 
 ## Writing New Tests
 
