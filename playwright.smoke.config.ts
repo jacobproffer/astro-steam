@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Smoke test configuration - assumes dev server is already running
+ * Smoke test configuration - reuses an existing dev server or starts one if needed
  * This is used for git hooks to quickly catch critical accessibility issues
  */
 export default defineConfig({
@@ -26,9 +26,6 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: "http://localhost:4321",
-
-    /* Collect trace when retrying the failed test. */
-    trace: "on-first-retry",
   },
 
   /* Configure projects for major browsers */
@@ -44,6 +41,6 @@ export default defineConfig({
     command: "astro dev --config astro.config.dev.mjs --port 4321 --host",
     url: "http://localhost:4321",
     reuseExistingServer: true, // Always reuse if available
-    timeout: 30000, // Shorter timeout
+    timeout: 120000, // 2 minutes to allow for cold starts
   },
 });

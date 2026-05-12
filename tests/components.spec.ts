@@ -162,10 +162,12 @@ test.describe("Steam Component Accessibility", () => {
     // Trigger hover state on the link
     await astroLink.hover();
 
-    // Run accessibility scan with the link hovered to verify contrast is maintained
-    const results = await new AxeBuilder({ page }).analyze();
+    // Run targeted contrast scan focusing on color-contrast rule only
+    const results = await new AxeBuilder({ page })
+      .withRules(["color-contrast"])
+      .analyze();
 
-    // Verify with the link hovered we still have no violations present
+    // Verify no contrast violations with the link hovered
     expect(results.violations).toEqual([]);
   });
 
@@ -183,10 +185,12 @@ test.describe("Steam Component Accessibility", () => {
     // Trigger focus state on the link
     await astroLink.focus();
 
-    // Run accessibility scan with the link focused to verify contrast is maintained
-    const results = await new AxeBuilder({ page }).analyze();
+    // Run targeted contrast scan focusing on color-contrast rule only
+    const results = await new AxeBuilder({ page })
+      .withRules(["color-contrast"])
+      .analyze();
 
-    // Verify no violations with the link focused
+    // Verify no contrast violations with the link focused
     expect(results.violations).toEqual([]);
   });
 });

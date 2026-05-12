@@ -27,7 +27,7 @@ This project uses Husky to run automated checks:
 
 - **pre-push**: Runs smoke tests automatically before each push to catch critical accessibility issues
 - The smoke test will start the dev server if it's not running, or reuse an existing one
-- Takes ~30-60 seconds if server is already running, or up to 2 minutes on first push
+- Takes ~30 seconds if the server is already running; if the dev server is not already running, startup must complete within the smoke test timeout
 - To bypass the hook if needed: `git push --no-verify`
 - **Recommendation**: Run full test suite (`npm test`) before major commits or PRs
 - **Pro tip**: Keep `npm run dev` running in a terminal to make smoke tests faster
