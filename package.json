@@ -3,11 +3,12 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "astro dev --config astro.config.dev.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test": "playwright test",
+    "test:smoke": "playwright test tests/smoke.spec.ts --config=playwright.smoke.config.ts",
     "test:ui": "playwright test --ui",
     "test:headed": "playwright test --headed",
     "test:report": "playwright show-report",
