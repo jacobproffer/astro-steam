@@ -8,6 +8,9 @@ This project uses Playwright with axe-core for automated accessibility testing.
 # Run all tests in headless mode
 npm test
 
+# Run quick smoke test (critical accessibility checks only)
+npm run test:smoke
+
 # Run tests with UI mode (recommended for development)
 npm run test:ui
 
@@ -18,8 +21,20 @@ npm run test:headed
 npm run test:report
 ```
 
+## Git Hooks
+
+This project uses Husky to run automated checks:
+
+- **pre-push**: Runs smoke tests automatically before each push to catch critical accessibility issues
+- The smoke test will start the dev server if it's not running, or reuse an existing one
+- Takes ~30 seconds if the server is already running; if the dev server is not already running, startup must complete within the smoke test timeout
+- To bypass the hook if needed: `git push --no-verify`
+- **Recommendation**: Run full test suite (`npm test`) before major commits or PRs
+- **Pro tip**: Keep `npm run dev` running in a terminal to make smoke tests faster
+
 ## Test Files
 
+- `tests/smoke.spec.ts` - Fast smoke tests for git hooks (critical WCAG checks)
 - `tests/accessibility.spec.ts` - General accessibility tests for the homepage
 - `tests/components.spec.ts` - Component-specific accessibility tests
 
@@ -41,6 +56,8 @@ npm run test:report
 - Keyboard navigation works for all interactive elements
 - All buttons and links have accessible names
 - Proper document structure with semantic HTML landmarks
+- Anchor links maintain proper contrast when hovered
+- Anchor links maintain proper contrast when focused
 
 ## Writing New Tests
 

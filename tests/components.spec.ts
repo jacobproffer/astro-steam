@@ -147,4 +147,50 @@ test.describe("Steam Component Accessibility", () => {
 
     expect(accessibilityScanResults.violations).toEqual([]);
   });
+
+  test("anchor links should maintain contrast when hovered", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    // Find an external link (e.g., the Astro link in the Information section)
+    const astroLink = page.getByRole("link", { name: "Astro" });
+
+    // Verify the link exists
+    await expect(astroLink).toBeVisible();
+
+    // Trigger hover state on the link
+    await astroLink.hover();
+
+    // Run targeted contrast scan focusing on color-contrast rule only
+    const results = await new AxeBuilder({ page })
+      .withRules(["color-contrast"])
+      .analyze();
+
+    // Verify no contrast violations with the link hovered
+    expect(results.violations).toEqual([]);
+  });
+
+  test("anchor links should maintain contrast when focused", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    // Find an external link (e.g., the Astro link in the Information section)
+    const astroLink = page.getByRole("link", { name: "Astro" });
+
+    // Verify the link exists
+    await expect(astroLink).toBeVisible();
+
+    // Trigger focus state on the link
+    await astroLink.focus();
+
+    // Run targeted contrast scan focusing on color-contrast rule only
+    const results = await new AxeBuilder({ page })
+      .withRules(["color-contrast"])
+      .analyze();
+
+    // Verify no contrast violations with the link focused
+    expect(results.violations).toEqual([]);
+  });
 });
