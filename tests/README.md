@@ -42,6 +42,7 @@ npm run test:report
 - All buttons and links have accessible names
 - Proper document structure with semantic HTML landmarks
 - Anchor links maintain proper contrast when hovered
+- Anchor links maintain proper contrast when focused
 
 ## Writing New Tests
 

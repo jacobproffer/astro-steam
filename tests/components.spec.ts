@@ -168,4 +168,25 @@ test.describe("Steam Component Accessibility", () => {
     // Verify with the link hovered we still have no violations present
     expect(results.violations).toEqual([]);
   });
+
+  test("anchor links should maintain contrast when focused", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    // Find an external link (e.g., the Astro link in the Information section)
+    const astroLink = page.getByRole("link", { name: "Astro" });
+
+    // Verify the link exists
+    await expect(astroLink).toBeVisible();
+
+    // Trigger focus state on the link
+    await astroLink.focus();
+
+    // Run accessibility scan with the link focused to verify contrast is maintained
+    const results = await new AxeBuilder({ page }).analyze();
+
+    // Verify no violations with the link focused
+    expect(results.violations).toEqual([]);
+  });
 });
