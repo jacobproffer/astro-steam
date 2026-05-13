@@ -8,7 +8,11 @@ export default defineConfig({
   site: "https://whatisjacobplaying.com/",
   output: 'server',
   adapter: netlify(),
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes('/404')
+    })
+  ],
   image: {
     domains: ["cdn.cloudflare.steamstatic.com", "avatars.steamstatic.com", "avatars.akamai.steamstatic.com"],
   },

@@ -12,7 +12,11 @@ export default defineConfig({
         edgeMiddleware: false, // Disable edge middleware emulation
         imageCDN: false, // Disable image CDN emulation
     }),
-    integrations: [sitemap()],
+    integrations: [
+        sitemap({
+            filter: (page) => !page.includes('/404')
+        })
+    ],
     image: {
         domains: ["cdn.cloudflare.steamstatic.com", "avatars.steamstatic.com", "avatars.akamai.steamstatic.com"],
     },
