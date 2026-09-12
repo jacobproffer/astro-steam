@@ -7,11 +7,6 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "test": "playwright test",
-    "test:smoke": "playwright test tests/smoke.spec.ts --config=playwright.smoke.config.ts",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed",
-    "test:report": "playwright show-report",
     "prepare": "husky"
   },
   "dependencies": {
@@ -24,8 +19,6 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
-    "@playwright/test": "^1.63.0",
     "husky": "^9.1.7"
   }
 }
