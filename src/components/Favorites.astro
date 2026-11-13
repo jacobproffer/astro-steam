@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Section from "@components/Section.astro";
+import Barcode from "@components/Barcode.astro";
 import playTime from "@utils/playTime.js";
 import { getGameHeaderImageUrl } from "@utils/steamAPI.js";
 import type { OwnedGame } from "../types/steam";
@@ -10,33 +11,49 @@ interface Props {
 }
 
 const { games } = Astro.props;
+const shown = games.slice(0, 2).filter((game) => game.name && game.appid);
 ---
 
-<Section headline="Favorite Games">
+<Section headline="Favorite Games" index={2} meta="Top by hours">
   {
-    games.length > 0 ? (
-      <ul class="grid grid-cols-2 items-center gap-4 max-w-max">
-        {games
-          .slice(0, 2)
-          .filter((game) => game.name && game.appid)
-          .map((game) => (
-            <li>
-              <Image
-                class="border border-gray rounded-lg"
-                src={getGameHeaderImageUrl(game.appid)}
-                alt={game.name || "Unknown Game"}
-                width={460}
-                height={215}
-                loading="eager"
-              />
-              <p class="text-sm text-center mt-2">
-                {playTime(game.playtime_forever ?? 0)} played
-              </p>
-            </li>
-          ))}
+    shown.length > 0 ? (
+      <ul class="grid sm:grid-cols-2 gap-6">
+        {shown.map((game, i) => (
+          <li class="group flex flex-col gap-3">
+            <div class="brackets p-2">
+              <div class="relative overflow-hidden bevel-inset bg-olive-900">
+                <Image
+                  class="block w-full h-auto"
+                  src={getGameHeaderImageUrl(game.appid)}
+                  alt={game.name || "Unknown Game"}
+                  width={460}
+                  height={215}
+                  loading="eager"
+                />
+                <span class="absolute top-2 left-2 micro px-1.5 py-0.5 bg-ink/80 text-accent">
+                  Lot {String(i + 1).padStart(3, "0")}
+                </span>
+              </div>
+            </div>
+            <div class="flex items-end justify-between gap-4">
+              <div class="flex flex-col gap-1 min-w-0">
+                <p class="font-display font-medium uppercase tracking-wide truncate">
+                  {game.name}
+                </p>
+                <p class="micro text-khaki-dim">
+                  {playTime(game.playtime_forever ?? 0)} logged
+                </p>
+              </div>
+              <div class="flex flex-col items-end gap-1 text-khaki-dim shrink-0">
+                <Barcode value={String(game.appid)} height={18} class="h-[18px] w-auto" />
+                <span class="micro">App {game.appid}</span>
+              </div>
+            </div>
+          </li>
+        ))}
       </ul>
     ) : (
-      <p class="text-gray">No games data available</p>
+      <p class="micro text-khaki-dim">No games data available</p>
     )
   }
 </Section>

@@ -3,8 +3,8 @@ import Section from "@components/Section.astro";
 import ExternalLink from "@components/ExternalLink.astro";
 ---
 
-<Section headline="Site Information">
-  <p>
+<Section headline="Site Information" index={4} meta="Colophon">
+  <p class="max-w-prose text-khaki">
     This site is built by <ExternalLink
       url="https://proffer.dev/"
       title="Jacob Proffer"
@@ -16,5 +16,8 @@ import ExternalLink from "@components/ExternalLink.astro";
       url="https://www.typescriptlang.org/"
       title="TypeScript"
     />.
+  </p>
+  <p class="micro text-khaki-dim flex flex-wrap gap-x-3" aria-hidden="true">
+    <span>End of file</span><span class="text-accent">//</span><span>Worldwide (SX)</span>
   </p>
 </Section>

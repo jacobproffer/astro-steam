@@ -17,3 +17,20 @@ const chooseBackground = (game) => {
 };
 
 export default chooseBackground;
+
+/**
+ * Accent color per game, used for HUD highlights across the page.
+ * Falls back to Source HUD amber.
+ */
+export const chooseAccent = (game) => {
+    switch (game) {
+        case 'Arma 3':
+            return '#b8c46a';
+        case 'Left 4 Dead 2':
+            return '#e0533f';
+        case 'RuneScape':
+            return '#e8c547';
+        default:
+            return '#f2a93b';
+    }
+};

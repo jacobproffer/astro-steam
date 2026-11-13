@@ -9,6 +9,7 @@ import Biography from "@components/Biography.astro";
 import Favorites from "@components/Favorites.astro";
 import RecentGames from "@components/RecentGames.astro";
 import Information from "@components/Information.astro";
+import { chooseAccent } from "@utils/chooseBackground.js";
 import {
   fetchPlayerProfile,
   fetchRecentlyPlayedGames,
@@ -76,10 +77,16 @@ const { statusClass, headline, status } = determineUserStatus(player);
 const pageTitle = `What is ${userName} Playing`;
 ---
 
-<BaseLayout pageTitle={pageTitle}>
+<BaseLayout pageTitle={pageTitle} accent={chooseAccent(userIsPlaying || "")}>
   <Header userURL={userURL} userAvatar={userAvatar} />
   <Grid>
-    <Hero statusClass={statusClass} status={status} headline={headline} />
+    <Hero
+      statusClass={statusClass}
+      status={status}
+      headline={headline}
+      backdrop={userIsPlaying || "Standby"}
+      serial={player?.steamid}
+    />
     <Panel>
       <Biography
         location={userCountry || ""}
