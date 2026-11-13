@@ -1,20 +1,103 @@
 ---
+import Barcode from "@components/Barcode.astro";
+
 interface Props {
   statusClass: string;
   status: string;
   headline: string;
+  /** Large vertical backdrop word, e.g. the current game */
+  backdrop?: string;
+  /** Real identifier used for the barcode + readout */
+  serial?: string;
 }
 
-const { statusClass, status, headline } = Astro.props;
+const { statusClass, status, headline, backdrop, serial = "0" } = Astro.props;
+
+const stateLabel: Record<string, string> = {
+  "text-accent": "In game",
+  "text-online": "Online",
+  "text-offline": "Offline",
+};
+const label = stateLabel[statusClass] ?? "Status";
+
+const now = new Date();
+const stamp = now
+  .toLocaleString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: "America/New_York",
+  })
+  .replace(",", " //");
 ---
 
-<section class="flex items-center justify-center max-xl:pt-40 max-xl:pb-20">
-  <div class="flex flex-col gap-2">
+<section
+  class="relative flex flex-col justify-between overflow-hidden px-6 md:px-10 pt-28 pb-8 max-xl:min-h-[80svh]"
+>
+  <!-- Vertical backdrop type -->
+  {
+    backdrop && (
+      <p
+        class="pointer-events-none absolute -right-2 top-20 bottom-6 font-display font-[150] uppercase leading-none text-khaki/15 [writing-mode:vertical-rl] text-[clamp(4rem,11vh,9rem)] tracking-[0.04em] whitespace-nowrap overflow-hidden"
+        aria-hidden="true"
+      >
+        {backdrop}
+      </p>
+    )
+  }
+
+  <div class="micro flex flex-wrap items-center gap-x-4 gap-y-1 text-khaki-dim boot" style="--i:0">
+    <span>SYS.STATUS</span>
+    <span class="text-accent">//</span>
+    <span>{stamp} EST</span>
+  </div>
+
+  <div class="relative flex flex-col gap-6 py-16 max-w-2xl">
+    <div class="flex items-center gap-4 boot" style="--i:1">
+      <span
+        class="grid place-items-center size-11 rounded-full border-2 border-accent/80 ring-4 ring-accent/15 micro text-khaki"
+        aria-hidden="true">00</span
+      >
+      <span class="h-px w-16 bg-accent/60" aria-hidden="true"></span>
+      <span class={`micro inline-flex items-center gap-2 ${statusClass}`}>
+        <span class="blink size-2 bg-current" aria-hidden="true"></span>
+        {label}
+      </span>
+    </div>
+
     {
       headline && (
-        <h1 class="text-6xl max-md:text-4xl font-share-tech">{headline}</h1>
+        <h1
+          class="boot font-display font-[200] uppercase leading-[0.95] tracking-[0.02em] text-[clamp(2.75rem,6vw,5.5rem)] text-khaki"
+          style="--i:2"
+        >
+          {headline}
+        </h1>
       )
     }
-    {status && <p class={statusClass} id="status" set:html={status} />}
+    {
+      status && (
+        <p
+          class="boot max-w-md text-lg text-khaki/85 [&_a]:text-accent [&_a]:underline [&_a]:underline-offset-4 [&_a:hover]:text-khaki [&_time]:text-accent"
+          id="status"
+          style="--i:3"
+          set:html={status}
+        />
+      )
+    }
+  </div>
+
+  <div class="flex items-end justify-between gap-6 text-khaki-dim boot" style="--i:4">
+    <div class="flex flex-col gap-1">
+      <Barcode value={serial} class="text-khaki/70 h-7 w-auto" />
+      <span class="micro">ID {serial}</span>
+    </div>
+    <div class="micro text-right hidden sm:block">
+      <span class="block">Field dossier</span>
+      <span class="block text-accent">Steam // Dept. 04</span>
+    </div>
   </div>
 </section>

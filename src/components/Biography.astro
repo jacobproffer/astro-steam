@@ -1,7 +1,5 @@
 ---
 import Section from "@components/Section.astro";
-import Globe from "@assets/img/globe.svg";
-import Person from "@assets/img/person.svg";
 import playTime from "@utils/playTime.js";
 import type { OwnedGame } from "../types/steam";
 
@@ -53,69 +51,65 @@ const mostPlayedGame =
       })()
     : null;
 
-const showBiography =
-  (personaname && yearsOnSteam > 0 && totalGames > 0) ||
-  (mostPlayedGame && totalMinutes > 0);
+const joinedDate = joined ? new Date(parseInt(joined) * 1000) : null;
+
+const rows = [
+  personaname && { label: "Callsign", value: personaname },
+  location && { label: "Location", value: location },
+  joinedDate && {
+    label: "Enlisted",
+    value: joinedDate.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "2-digit",
+    }),
+    datetime: joinedDate.toISOString(),
+  },
+  yearsOnSteam > 0 && {
+    label: "Service",
+    value: `${yearsOnSteam} ${yearsOnSteam === 1 ? "yr" : "yrs"}`,
+  },
+  totalGames > 0 && {
+    label: "Library",
+    value: `${totalGames.toLocaleString()} ${totalGames === 1 ? "title" : "titles"}`,
+  },
+  totalMinutes > 0 && { label: "Time logged", value: playTime(totalMinutes) },
+  mostPlayedGame && {
+    label: "Most played",
+    value: mostPlayedGame.name,
+    note: playTime(mostPlayedGame.playtime_forever ?? 0),
+  },
+].filter(Boolean) as {
+  label: string;
+  value: string;
+  datetime?: string;
+  note?: string;
+}[];
 ---
 
-<Section headline="Biography">
-  <ul class="max-w-max flex max-md:flex-col md:items-center gap-6 max-md:gap-2">
-    {
-      location && (
-        <li class="flex items-center gap-2">
-          <Globe width={13} height={14} aria-hidden="true" />
-          Located in the <span class="text-blue">{location}</span>
-        </li>
-      )
-    }
-    {
-      joined && (
-        <li class="flex items-center gap-2">
-          <Person width={13} height={14} aria-hidden="true" />
-          Joined Steam on{" "}
-          <time
-            class="text-blue"
-            datetime={new Date(parseInt(joined) * 1000).toISOString()}
-          >
-            {new Date(parseInt(joined) * 1000).toLocaleDateString("en-US", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
-          </time>
-        </li>
-      )
-    }
-  </ul>
+<Section headline="Biography" index={1} meta="Personnel file">
   {
-    showBiography && (
-      <p class="max-w-prose">
-        {personaname && yearsOnSteam > 0 && totalGames > 0 && (
-          <>
-            <span class="text-blue">{personaname}</span> has been a Steam member
-            for{" "}
-            <span class="text-blue">
-              {yearsOnSteam} {yearsOnSteam === 1 ? "year" : "years"}
-            </span>{" "}
-            with{" "}
-            <span class="text-blue">
-              {totalGames} {totalGames === 1 ? "game" : "games"}
-            </span>{" "}
-            in their library.{" "}
-          </>
-        )}
-        {mostPlayedGame && totalMinutes > 0 && (
-          <>
-            With <span class="text-blue">{playTime(totalMinutes)}</span> played,
-            their most-played game is{" "}
-            <span class="text-blue">{mostPlayedGame.name}</span> at{" "}
-            <span class="text-blue">
-              {playTime(mostPlayedGame.playtime_forever ?? 0)}
-            </span>
-            .
-          </>
-        )}
-      </p>
+    rows.length > 0 ? (
+      <dl class="flex flex-col gap-3">
+        {rows.map((row) => (
+          <div class="flex items-baseline gap-3">
+            <dt class="micro text-khaki-dim shrink-0">{row.label}</dt>
+            <span class="leader" aria-hidden="true" />
+            <dd class="text-right text-khaki">
+              {row.datetime ? (
+                <time datetime={row.datetime}>{row.value}</time>
+              ) : (
+                row.value
+              )}
+              {row.note && (
+                <span class="micro text-accent ml-2">{row.note}</span>
+              )}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    ) : (
+      <p class="micro text-khaki-dim">No personnel data on file.</p>
     )
   }
 </Section>

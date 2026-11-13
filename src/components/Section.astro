@@ -1,16 +1,37 @@
 ---
 interface Props {
   headline: string;
+  /** Section number, shown in the circle badge */
+  index?: number;
+  /** Short right-aligned metadata, e.g. a count or code */
+  meta?: string;
 }
 
-const { headline } = Astro.props;
+const { headline, index = 0, meta } = Astro.props;
+const num = String(index).padStart(2, "0");
 ---
 
-<section class="flex flex-col gap-4 p-6 bg-black-100 rounded-md">
-  {
-    headline && (
-      <h2 class="text-4xl max-md:text-2xl font-share-tech">{headline}</h2>
-    )
-  }
+<section
+  class="boot relative flex flex-col gap-6 px-6 md:px-10 py-10 border-b border-olive-800"
+  style={`--i:${index + 1}`}
+>
+  <div class="flex items-center gap-4">
+    <span
+      class="shrink-0 grid place-items-center size-10 rounded-full border-2 border-accent/80 ring-4 ring-accent/15 micro text-khaki"
+      aria-hidden="true">{num}</span
+    >
+    {
+      headline && (
+        <h2 class="font-display font-medium uppercase tracking-[0.04em] text-2xl md:text-3xl leading-tight text-accent">
+          {headline}
+        </h2>
+      )
+    }
+    <span class="h-px flex-1 bg-olive-700 max-sm:hidden" aria-hidden="true"
+    ></span>
+    <span class="micro text-khaki-dim max-sm:hidden" aria-hidden="true">
+      SEC.{num}{meta && ` // ${meta}`}
+    </span>
+  </div>
   <slot />
 </section>

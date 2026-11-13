@@ -1,17 +1,23 @@
 ---
-import "@fontsource/share-tech";
+import "@fontsource-variable/exo-2";
+import "@fontsource/share-tech-mono";
 import "@styles/global.css";
 import SiteSEO from "@components/SiteSEO.astro";
 
 interface Props {
   pageTitle: string;
   pageDescription?: string;
+  accent?: string;
 }
 
-const { pageTitle, pageDescription } = Astro.props;
+const { pageTitle, pageDescription, accent } = Astro.props;
 ---
 
-<html class="h-full" lang="en">
+<html
+  class="h-full"
+  lang="en"
+  style={accent ? `--accent: ${accent}` : undefined}
+>
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
@@ -33,7 +39,7 @@ const { pageTitle, pageDescription } = Astro.props;
     <SiteSEO seo={{ title: pageTitle, description: pageDescription }} />
   </head>
   <body
-    class="relative h-full text-white bg-black animate-[fadeIn_0.6s_ease-in] [animation-timeline:auto]"
+    class="relative h-full text-khaki bg-ink antialiased"
   >
     <slot />
   </body>

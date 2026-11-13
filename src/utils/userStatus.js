@@ -14,7 +14,7 @@ import { formatLastOnline } from "./formatDate.js";
 export function determineUserStatus(player) {
     if (!player) {
         return {
-            statusClass: "not-playing",
+            statusClass: "text-offline",
             headline: "Offline",
             status: "Unable to load user data.",
         };
@@ -29,7 +29,7 @@ export function determineUserStatus(player) {
     // User is currently in a game
     if (userIsPlaying) {
         return {
-            statusClass: "text-blue",
+            statusClass: "text-accent",
             headline: `${userName} is online`,
             status: `Currently playing <a href="https://store.steampowered.com/app/${userIsPlayingId}" target="_blank" rel="noopener noreferrer">${userIsPlaying}</a>.`,
         };
@@ -38,7 +38,7 @@ export function determineUserStatus(player) {
     // User is online but not playing
     if (userStatus > PERSONA_STATE.OFFLINE) {
         return {
-            statusClass: "text-yellow",
+            statusClass: "text-online",
             headline: `${userName} is online`,
             status: "Currently on the Steam dashboard.",
         };
@@ -51,7 +51,7 @@ export function determineUserStatus(player) {
         : "";
 
     return {
-        statusClass: "text-red",
+        statusClass: "text-offline",
         headline: "Offline",
         status: lastSeenText,
     };

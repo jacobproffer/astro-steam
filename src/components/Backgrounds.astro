@@ -7,13 +7,28 @@ interface Props {
 }
 ---
 
-<div class="absolute inset-0 -z-10 w-full h-full bg-black">
+<div class="absolute inset-0 -z-10 w-full h-full bg-olive-950 overflow-hidden">
   <Image
-    class="block w-full h-full object-cover object-center opacity-10"
+    class="block w-full h-full object-cover object-center grayscale contrast-125 brightness-75 opacity-40 mix-blend-luminosity"
     src={chooseBackground(Astro.props.currentGame)}
     alt=""
     widths={[413, 825, 1650]}
     sizes={`(max-width: 767px) 413px, (max-width: 1023px) 825px, (max-width: 1439px) 825px, 1650px`}
     loading="eager"
   />
+  <!-- Duotone wash: accent bleeding up from the bottom, olive at the top -->
+  <div
+    class="absolute inset-0 mix-blend-color bg-[linear-gradient(to_top,var(--color-accent)_0%,var(--color-olive-600)_70%)] opacity-70"
+  >
+  </div>
+  <div
+    class="absolute inset-0 bg-[radial-gradient(120%_80%_at_0%_100%,color-mix(in_oklab,var(--color-accent)_35%,transparent),transparent_60%)] mix-blend-soft-light"
+  >
+  </div>
+  <div
+    class="absolute inset-0 bg-[linear-gradient(to_bottom,var(--color-ink)_0%,transparent_30%,transparent_70%,var(--color-ink)_100%)]"
+  >
+  </div>
+  <div class="hud-grid absolute inset-0" aria-hidden="true"></div>
+  <div class="grain absolute inset-0" aria-hidden="true"></div>
 </div>
